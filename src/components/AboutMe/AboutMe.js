@@ -1,5 +1,5 @@
 import './AboutMe.css';
-import photo from  '../../images/photo.png';
+import photo from '../../images/photo.png';
 
 export function AboutMe() {
     return (
@@ -7,7 +7,7 @@ export function AboutMe() {
             <h2 className="about-me__title">Студент</h2>
             <article className="about-me__container">
                 <div className="about-me__info">
-                    <div>
+                    <div className="about-me__info-box">
                         <h3 className="about-me__info-title">Егор</h3>
                         <p className="about-me__info-subtitle">Фронтенд-разработчик, 25 лет</p>
                         <p className="about-me__info-text">Я родился и живу в Калужской области, закончил факультет
