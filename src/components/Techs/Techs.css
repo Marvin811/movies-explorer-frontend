@@ -70,3 +70,29 @@
     letter-spacing: -0.04em;
 }
 
+@media screen and (max-width: 900px) {
+    .techs {
+        min-height: 567px;
+    }
+
+    .techs__title {
+        margin: 0 50px;
+        padding-top: 90px;
+    }
+
+    .techs__subtitle {
+        margin: 80px 0 22px;
+    }
+
+    .techs_text {
+        font-size: 12px;
+        line-height: 18px;
+    }
+    .techs__list{
+        margin: 80px 60px 0;
+    }
+    .techs__item {
+        font-size: 12px;
+        line-height: 15px;
+    }
+}

@@ -32,14 +32,14 @@
 
 @media screen and (max-width: 900px) {
     .promo__container {
-        margin: 40px 20px 0 20px;
-        min-height: 928px;
+        margin: 15px 20px 0 20px;
+        min-height: 835px;
     }
 
     .promo__title {
         font-size: 40px;
         line-height: 52px;
-        margin-top: 350px;
+        margin-top: 352px;
         max-width: 680px;
     }
 }
