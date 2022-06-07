@@ -11,9 +11,9 @@ export function Main() {
         <main>
             <Promo/>
             <AboutProject />
-            {/*<Techs />*/}
-            {/*<AboutMe />*/}
-            {/*<Portfolio />*/}
+            <Techs />
+            <AboutMe />
+            <Portfolio />
         </main>
     )
 };

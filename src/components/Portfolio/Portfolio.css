@@ -69,3 +69,30 @@
         padding: 8px 5px 0px 0px
     }
 }
+
+@media screen and (max-width: 450px) {
+    .portfolio {
+        min-height: 364px;
+    }
+    .portfolio__container {
+        margin: 70px 14px 0 14px;
+    }
+    .portfolio__title {
+        margin: 0 0 20px;
+        font-size: 14px;
+        line-height: 20px;
+    }
+    .portfolio__item {
+        height: 67px;
+    }
+    .portfolio__item-title{
+        font-size: 18px;
+        line-height: 28px;
+    }
+    .portfolio__item-arrow {
+        width: 10px;
+        height: 10px;
+        padding: 8px 5px 12px 0px;
+    }
+
+}

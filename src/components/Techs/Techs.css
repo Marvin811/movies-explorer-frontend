@@ -88,11 +88,53 @@
         font-size: 12px;
         line-height: 18px;
     }
-    .techs__list{
+
+    .techs__list {
         margin: 80px 60px 0;
     }
+
     .techs__item {
         font-size: 12px;
         line-height: 15px;
     }
+}
+
+@media screen and (max-width: 650px){
+    .techs__list{
+        grid-template-columns: repeat(4, 84px);
+        grid-template-rows: 57px;
+        grid-auto-rows: 57px;
+        margin: 80px 0 0;
+    }
+}
+
+@media screen and (max-width: 550px) {
+    .techs {
+        min-height: 651px;
+    }
+    .techs__title {
+        margin: 0 18px;
+        font-size: 18px;
+        line-height: 22px;
+        padding: 50px 0 28px;
+    }
+
+    .techs__subtitle {
+        font-size: 30px;
+        line-height: 36px;
+        margin: 60px 0 26px;
+    }
+
+    .techs_text {
+        font-size: 11px;
+        line-height: 16px;
+        max-width: 292px;
+    }
+
+    .techs__list {
+        grid-template-columns: repeat(2, 84px);
+        margin-top: 41px;
+    }
+
+
 }
