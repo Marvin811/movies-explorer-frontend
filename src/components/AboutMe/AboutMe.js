@@ -1,4 +1,5 @@
 import './AboutMe.css';
+import React from "react";
 import photo from '../../images/photo.png';
 
 export function AboutMe() {
@@ -17,10 +18,10 @@ export function AboutMe() {
                     </div>
                     <ul className="about-me__contacts">
                         <li className="about-me__contact">
-                            <a className="about-me__link" href="https://t.me/egorlukin" target="_blank">Telegram</a>
+                            <a className="about-me__link" href="https://t.me/egorlukin" target="_blank" rel="noopener noreferrer">Telegram</a>
                         </li>
                         <li className="about-me__contact">
-                            <a className="about-me__link" href="https://github.com/Marvin811" target="_blank">Github</a>
+                            <a className="about-me__link" href="https://github.com/Marvin811" target="_blank" rel="noopener noreferrer">Github</a>
                         </li>
                     </ul>
                 </div>

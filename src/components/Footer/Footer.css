@@ -75,6 +75,7 @@
         flex-direction: column-reverse;
         justify-content: space-between;
         align-items: center;
+        padding: 20px 0 10px;
     }
     .footer__title{
         font-size: 12px;

@@ -1,4 +1,5 @@
 import './AboutProject.css';
+import React from "react";
 
 export function AboutProject() {
     return (
