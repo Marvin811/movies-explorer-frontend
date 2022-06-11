@@ -1,9 +1,18 @@
 import React from "react";
 import './Movies.css';
 import Navigation from "../Navigation/Navigation";
+import {SearchForm} from "../SearchForm/SearchForm";
 
-export function Movies() {
+export function Movies(props) {
+    const { tumbler, setTumbler } = props;
     return(
-        <Navigation />
+        <div>
+            <Navigation />
+            <SearchForm
+                tumbler={tumbler}
+                setTumbler={setTumbler}
+            />
+        </div>
+
     )
 }

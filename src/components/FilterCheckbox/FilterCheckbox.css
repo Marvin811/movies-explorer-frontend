@@ -1,0 +1,30 @@
+.checkbox__tumbler {
+    position: relative;
+    align-self: center;
+    background-color: #c6c6c6;
+    width: 36px;
+    height: 20px;
+    transition: 1s;
+    border-radius: 20px;
+    -webkit-appearance: none;
+}
+
+.checkbox__tumbler:before {
+    background-color: #f5f5f5;
+    border-radius: 20px;
+    position: absolute;
+    left: 2px;
+    top: 2px;
+    height: 16px;
+    width: 16px;
+    content: "";
+}
+
+.checkbox__tumbler:checked {
+    background-color: #2be080;
+}
+
+.checkbox__tumbler:checked:before {
+    left: 18px;
+    background-color: #f5f5f5;
+}
