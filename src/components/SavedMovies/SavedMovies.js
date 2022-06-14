@@ -1,12 +1,12 @@
 import React from "react";
-import './Movies.css';
+import './SavedMovies.css';
 import Navigation from "../Navigation/Navigation";
 import {SearchForm} from "../SearchForm/SearchForm";
-import {MoviesCardList} from "../MoviesCardList/MoviesCardList"
+import {MoviesCardList} from "../MoviesCardList/MoviesCardList";
 
-export function Movies(props) {
+export function SavedMovies(props) {
     const {tumbler, setTumbler} = props;
-    return (
+    return(
         <div>
             <Navigation/>
             <SearchForm
@@ -15,6 +15,5 @@ export function Movies(props) {
             />
             <MoviesCardList/>
         </div>
-
     )
 }

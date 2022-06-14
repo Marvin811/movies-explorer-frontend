@@ -1,15 +1,15 @@
 .search {
     font-family: Inter, Arial, sans-serif;
     color: white;
-    padding: 22px 70px 0;
+    padding: 95px 0 0;
+    margin: 0 70px;
 }
 
 .search__container {
     display: flex;
     margin: 0 auto;
-    max-width: 1140px;
     box-sizing: border-box;
-    border-bottom: 1px solid #424242;
+    border-bottom: 1px solid rgba(170, 170, 170, .2);
     align-items: baseline;
     padding-bottom: 25px;
 }
