@@ -3,6 +3,7 @@ import './Movies.css';
 import Navigation from "../Navigation/Navigation";
 import {SearchForm} from "../SearchForm/SearchForm";
 import {MoviesCardList} from "../MoviesCardList/MoviesCardList"
+import {More} from "../More/More";
 
 export function Movies(props) {
     const {tumbler, setTumbler} = props;
@@ -14,6 +15,7 @@ export function Movies(props) {
                 setTumbler={setTumbler}
             />
             <MoviesCardList/>
+            <More />
         </div>
 
     )

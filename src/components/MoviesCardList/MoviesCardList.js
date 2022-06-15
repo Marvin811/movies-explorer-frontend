@@ -1,7 +1,6 @@
 import React from "react";
 import './MoviesCardList.css'
 import {MoviesCard} from "../MoviesCard/MoviesCard";
-import {More} from "../More/More";
 
 export function MoviesCardList() {
     return (
@@ -20,7 +19,6 @@ export function MoviesCardList() {
                 <MoviesCard />
                 <MoviesCard />
             </div>
-            <More />
         </div>
     )
 }
