@@ -26,8 +26,18 @@
     opacity: 0.6;
 }
 
+@media screen and (max-width: 800px) {
+    .more {
+        padding-top: 70px;
+    }
+}
+
 @media screen and (max-width: 400px) {
+    .more {
+        padding-bottom: 83px
+    }
+
     .more__button {
-        width: 200px;
+        width: 300px;
     }
 }

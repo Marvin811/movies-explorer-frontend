@@ -1,13 +1,13 @@
 import "./SlideMenu.css";
 import closeButton from "../../images/close-button.svg";
-import { NavLink, Link } from "react-router-dom";
+import {NavLink, Link} from "react-router-dom";
 import profile from "../../images/icon.svg";
 import React from "react";
 
 function SlideMenu(props) {
-    const { isOpen, onClose } = props;
+    const {isOpen, onClose} = props;
 
-    const setActive = ({ isActive }) =>
+    const setActive = ({isActive}) =>
         isActive
             ? "slide-menu__link slide-menu__link_active link-opacity"
             : "slide-menu__link link-opacity";

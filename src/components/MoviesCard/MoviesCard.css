@@ -74,7 +74,17 @@
     color: #a0a0a0;
 }
 
-@media (max-width: 400px) {
+@media screen and (max-width: 800px) {
+    .card__text {
+        margin-bottom: 11px;
+    }
+
+    .card__text-container {
+        padding-bottom: 0;
+    }
+}
+
+@media screen and (max-width: 400px) {
     .card__text {
         font-size: 12px;
         line-height: 15px;
