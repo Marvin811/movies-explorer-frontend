@@ -16,7 +16,7 @@ export function Header(props) {
                             <Link className="header__link" to="/signup">
                                 <h2 className="header__link-title">Регистрация</h2>
                             </Link>
-                            <Link className="header__link" to="/movies">
+                            <Link className="header__link" to="/signin">
                                 <button className="header__link-button">Войти</button>
                             </Link>
 

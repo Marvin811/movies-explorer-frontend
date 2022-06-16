@@ -71,7 +71,7 @@
     margin: 14px 0 0 0;
 }
 
-@media (max-width: 900px) {
+@media screen and (max-width: 900px) {
     .about-project {
         padding: 90px 50px;
     }
@@ -105,7 +105,14 @@
 
 }
 
-@media (max-width: 550px) {
+@media screen and (max-width: 750px) {
+    .about-project__text-column {
+        max-width: 250px;
+    }
+}
+
+
+@media screen and (max-width: 550px) {
     .about-project {
         padding: 70px 18px 93px 18px;
     }

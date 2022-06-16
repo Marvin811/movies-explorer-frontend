@@ -127,6 +127,23 @@
     }
 }
 
+@media screen and (max-width: 750px) {
+    .about-me__info-title {
+        padding-right: 30px;
+
+    }
+
+    .about-me__info-subtitle {
+        padding-right: 30px;
+
+    }
+
+    .about-me__info-text {
+        padding-right: 30px;
+    }
+}
+
+
 @media screen and (max-width: 450px) {
     .about-me__title {
         padding: 47px 0 28px;

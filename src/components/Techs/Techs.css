@@ -99,8 +99,8 @@
     }
 }
 
-@media screen and (max-width: 650px){
-    .techs__list{
+@media screen and (max-width: 650px) {
+    .techs__list {
         grid-template-columns: repeat(4, 84px);
         grid-template-rows: 57px;
         grid-auto-rows: 57px;
@@ -111,7 +111,9 @@
 @media screen and (max-width: 550px) {
     .techs {
         min-height: 651px;
+        background-color: #Fafafa;
     }
+
     .techs__title {
         margin: 0 18px;
         font-size: 18px;

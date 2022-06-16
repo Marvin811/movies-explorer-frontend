@@ -15,6 +15,7 @@ export function SearchForm(props) {
                             type="text"
                             name="searchValue"
                             placeholder="Фильм"
+                            required
                         />
                         <button className="search__button" type="submit">
                             <img src={find} alt="Кнопка поиска"/>
