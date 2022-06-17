@@ -1,0 +1,23 @@
+.burger-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 74px;
+    margin: 0 30px;
+}
+
+.burger-header__button {
+    width: 44px;
+    height: 44px;
+    user-select: none;
+}
+
+@media screen and (max-width: 580px) {
+    .burger-header__button {
+        width: 40px;
+        height: 43px;
+    }
+    .burger-header {
+     margin: 0 10px;
+    }
+}

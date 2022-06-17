@@ -1,0 +1,97 @@
+.card {
+    background: #FFFFFF;
+    box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.08);
+    border-radius: 6px;
+}
+
+.card__pic {
+    width: 100%;
+    border-radius: 6px 6px 0 0;
+}
+
+.card__text-container {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 13px;
+}
+
+.card__button {
+    background-image: url(../../images/Unsaved.svg);
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 30px;
+    height: 30px;
+    align-self: center;
+    border: none;
+    cursor: pointer;
+    background-color: #fff;
+    padding-right: 16px;
+    transition: 0.2s ease;
+}
+
+.card__button:hover {
+    opacity: 0.6;
+}
+
+.card__button_type_delete {
+    background-image: url(../../images/crossCard.svg);
+}
+
+.card__button_type_saved {
+    background-image: url(../../images/Saved.svg);
+}
+
+.card__button-container {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+}
+
+.card__text {
+    max-width: 226px;
+    font-family: "Inter", sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 16px;
+    color: #000000;
+    margin: 12px 0 0 16px;
+}
+
+.card__time {
+    margin-left: 16px;
+    margin-top: 2px;
+    margin-bottom: 16px;
+    font-family: "Inter", sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 11px;
+    line-height: 13px;
+    color: #a0a0a0;
+}
+
+@media screen and (max-width: 800px) {
+    .card__text {
+        margin-bottom: 11px;
+    }
+
+    .card__text-container {
+        padding-bottom: 0;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .card__text {
+        font-size: 12px;
+        line-height: 15px;
+    }
+
+    .card__time {
+        font-size: 10px;
+        line-height: 12px;
+    }
+}

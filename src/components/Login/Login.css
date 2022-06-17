@@ -1,0 +1,156 @@
+.authorization {
+    background-color: #FAFAFA;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    width: 396px;
+    padding: 70px 0;
+    margin: 0 auto;
+
+}
+
+.authorization__title {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 29px;
+    color: #000000;
+    padding: 37px 0 40px;
+    margin: 0;
+}
+
+    .authorization__form {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .authorization__label {
+        display: flex;
+        flex-direction: column;
+        font-weight: 400;
+        font-size: 10px;
+        line-height: 12px;
+        color: #A0A0A0;
+    }
+
+.authorization__input {
+
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 17px;
+    color: #000000;
+    border: 0;
+    border-radius: 1px;
+    border-bottom: 1px solid #E8E8E8;
+    width: 396px;
+    box-sizing: border-box;
+    background-color: #FAFAFA;
+    margin: 0;
+    padding: 5px 0 10px;
+}
+
+.authorization__input:last-of-type {
+    margin: 0 0 5px 0;
+}
+
+
+.authorization__error {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 12px;
+    color: #EE3465;
+    padding-top: 6px;
+    padding-bottom: 6px;
+}
+
+.authorization__submit {
+    background: #3456F3;
+    border-radius: 3px;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 17px;
+    text-align: center;
+    color: #FFFFFF;
+    border: 0;
+    width: 396px;
+    height: 45px;
+    margin: 209px 0 16px 0;
+    padding: 0;
+    z-index: 1;
+}
+
+.authorization__submit-reg {
+    margin: 150px 0 16px 0;
+}
+
+.authorization__caption {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+    text-align: center;
+    color: #A0A0A0;
+}
+
+.authorization__caption-text {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+    text-align: center;
+    color: #3456F3;
+    text-decoration: none;
+}
+
+@media screen and (max-width: 900px) {
+    .authorization {
+        padding-top: 234px;
+    }
+}
+
+@media screen and (max-width: 450px) {
+    .authorization {
+        width: 100%;
+        align-items: center;
+        padding-top: 56px;
+    }
+
+    .authorization__title {
+        padding-top: 46px;
+        padding-bottom: 82px;
+    }
+
+    .authorization__form {
+        width: 260px;
+    }
+
+    .authorization__input {
+        width: 260px;
+    }
+
+    .authorization__submit {
+        width: 260px;
+        margin-top: 298px;
+        font-size: 12px;
+        line-height: 15px
+    }
+
+    .authorization__caption {
+        font-size: 12px;
+        line-height: 15px;
+    }
+
+    .authorization__caption-text {
+        font-size: 12px;
+        line-height: 15px;
+    }
+
+    .authorization__submit-reg {
+        margin-top: 237px;
+    }
+
+}
+
