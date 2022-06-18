@@ -1,6 +1,7 @@
-import React from "react";
+import React, {useState} from "react";
 import {Route, Routes, useLocation} from "react-router-dom";
 import './App.css';
+import {CurrentUserContext} from "../../contexts/CurrentUserContext";
 import {Header} from "../Header/Header";
 import {Main} from "../Main/Main";
 import {Footer} from "../Footer/Footer";
@@ -12,11 +13,14 @@ import {Profile} from "../Profile/Profile";
 import {NotFoundPage} from "../NotFoundPage/NotFoundPage";
 
 
+
 function App() {
+    const [currentUser, setCurrentUser] = useState({});
     const location = useLocation();
     const pathPageWithHeader = ['/']
     const pathPageWithFooter = ['/', '/movies', '/saved-movies']
     return (
+        <CurrentUserContext.Provider value={currentUser}>
         <div className="page">
             {pathPageWithHeader.includes(location.pathname) && <Header/>}
             <Routes>
@@ -32,8 +36,7 @@ function App() {
 
             {pathPageWithFooter.includes(location.pathname) && <Footer/>}
         </div>
-
-
+        </CurrentUserContext.Provider>
     )
         ;
 }
