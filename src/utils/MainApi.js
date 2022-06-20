@@ -119,7 +119,7 @@ class MainApi {
 }
 
 const mainApi = new MainApi({
-    baseUrl: 'ссылка на api'
+    baseUrl: 'https://movies-explorer.mavi.nomoreparties.sbs'
 })
 
 export default mainApi;
