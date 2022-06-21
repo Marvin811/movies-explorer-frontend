@@ -48,16 +48,16 @@ class MainApi {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                country: movieData.country || " ",
+                country: movieData.country,
                 director: movieData.director,
                 duration: movieData.duration,
                 year: movieData.year,
                 description: movieData.description,
-                trailerLink: movieData.trailerLink || " ",
+                trailerLink: movieData.trailerLink,
                 nameRU: movieData.nameRU,
                 nameEN: movieData.nameEN || ' ',
-                image: movieData.image.url,
-                thumbnail: movieData.image.formats.thumbnail.url,
+                image: 'https://api.nomoreparties.co' + movieData.image.url,
+                thumbnail: movieData.thumbnail,
                 movieId: movieData.id.toString(),
             })
         })

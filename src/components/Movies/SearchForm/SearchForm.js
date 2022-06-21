@@ -1,9 +1,11 @@
 import React from "react";
 import './SearchForm.css';
-import find from '../../images/find.svg';
-import Checkbox from "../FilterCheckbox/FilterCheckbox";
+import find from '../../../images/find.svg';
+import Checkbox from "../../FilterCheckbox/FilterCheckbox";
 
 export function SearchForm(props) {
+
+
     const {  tumbler, setTumbler } = props;
     return (
         <section className="search">

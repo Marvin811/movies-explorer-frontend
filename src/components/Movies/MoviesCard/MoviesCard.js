@@ -1,6 +1,6 @@
 import React from "react";
 import './MoviesCard.css'
-import card from "../../images/MoviePic.png"
+import card from "../../../images/MoviePic.png"
 import { useLocation } from "react-router-dom";
 
 export function MoviesCard({ movieData }) {

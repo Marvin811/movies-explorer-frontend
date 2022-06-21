@@ -20,9 +20,13 @@ function App() {
     const [savedMovies, setSavedMovies] = useState([]);
     const pathPageWithHeader = ['/'];
     const pathPageWithFooter = ['/', '/movies', '/saved-movies'];
+    // Все что касается карточек
+    const [moviesInputValue, setMoviesInputValue] = React.useState("");
+
+
 
     const filterRemovedCard = (movie) => {
-        setSavedMovies((savedMovies) => savedMovies.filter((item) => +item.movieId !== +movieId));
+        setSavedMovies((savedMovies) => savedMovies.filter((item) => +item.movieId !== +movie.id));
     }
 
     const handleRemoveCard = (movie) => {
@@ -36,7 +40,7 @@ function App() {
     const handleLikeClick = (moviesCard) => {
         const movie = savedMovies.find((item) => +item.movieId === moviesCard.id)
         if (movie) {
-            mainApi.removeMovie(movie._id)
+            mainApi.removeMovie(movie.id)
                 .then(() => {
                     filterRemovedCard(moviesCard);
                 })
