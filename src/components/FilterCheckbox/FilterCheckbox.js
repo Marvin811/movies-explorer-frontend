@@ -1,18 +1,13 @@
 import React from "react";
 import "./FilterCheckbox.css";
 
-function Checkbox(props) {
-    const { tumbler, setTumbler } = props;
-    function changeTumbler() {
-        setTumbler(tumbler ? false : true);
-    }
-
+function Checkbox({ switchShortMovie, isActive }) {
     return (
         <input
             type="checkbox"
             className="checkbox__tumbler link-opacity"
-            checked={tumbler}
-            onClick={changeTumbler}
+            checked={isActive}
+            onChange={switchShortMovie}
         ></input>
     );
 }

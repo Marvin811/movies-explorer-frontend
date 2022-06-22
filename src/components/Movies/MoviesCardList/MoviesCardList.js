@@ -7,9 +7,8 @@ export function MoviesCardList({movies, ...props}) {
         <div className="card-list">
             <div className="card-list__container">
                 {movies.map(movie => {
-                        return <MoviesCard movieData={movie} key={movie.id} {...props}/>
-                    }
-                )}
+                    return <MoviesCard  movieData={movie} key={movie.id} {...props}/>
+                })}
             </div>
         </div>
     )

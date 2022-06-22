@@ -12,6 +12,7 @@ import {SavedMovies} from "../SavedMovies/SavedMovies";
 import {Profile} from "../Profile/Profile";
 import {NotFoundPage} from "../NotFoundPage/NotFoundPage";
 import mainApi from "../../utils/MainApi";
+import {SavedMoviesContext} from "../../contexts/SavedMoviesContext";
 
 
 function App() {
@@ -24,7 +25,7 @@ function App() {
     const [moviesInputValue, setMoviesInputValue] = React.useState("");
 
 
-
+// оправить функцию filterRemovedCard
     const filterRemovedCard = (movie) => {
         setSavedMovies((savedMovies) => savedMovies.filter((item) => +item.movieId !== +movie.id));
     }
@@ -37,37 +38,41 @@ function App() {
             .catch((err) => `Ошибка ${err} при удалении фильма из сохраненных`);
     };
 
-    const handleLikeClick = (moviesCard) => {
-        const movie = savedMovies.find((item) => +item.movieId === moviesCard.id)
+    const handleLikeClick = (movieCard) => {
+        const movie = savedMovies.find((item) => +item.movieId === movieCard.id);
+
         if (movie) {
-            mainApi.removeMovie(movie.id)
+            mainApi.removeMovie(movie._id)
                 .then(() => {
-                    filterRemovedCard(moviesCard);
+                    filterRemovedCard(movieCard);
                 })
-                .catch((err) => `Ошибка ${err} при удалениии фильма из сохраненных`)
+                .catch((err) => `Ошибка ${err} при удалениии фильма из сохраненных`);
         } else {
-            mainApi.createMovie(moviesCard)
+            mainApi.createMovie(movieCard)
                 .then((result) => setSavedMovies([...savedMovies, result]))
-                .catch((err) => `Ошибка ${err} при добавлении фильма в сохраненные`)
+                .catch((err) => `Ошибка ${err} при добавлении фильма в сохраненные`);
         }
     };
+
     return (
         <CurrentUserContext.Provider value={currentUser}>
-            <div className="page">
-                {pathPageWithHeader.includes(location.pathname) && <Header/>}
-                <Routes>
-                    <Route path="/" element={<Main/>}/>
-                    <Route path="/signin" element={< Login/>}/>
-                    <Route path="/signup" element={<Register/>}/>
-                    <Route path="/movies" element={<Movies/>}/>
-                    <Route path="/saved-movies" element={<SavedMovies/>}/>
-                    <Route path="/profile" element={<Profile/>}/>
-                    <Route path="/*" element={< NotFoundPage/>}/>
-                </Routes>
+            <SavedMoviesContext.Provider value={savedMovies}>
+                <div className="page">
+                    {pathPageWithHeader.includes(location.pathname) && <Header/>}
+                    <Routes>
+                        <Route path="/" element={<Main/>}/>
+                        <Route path="/signin" element={< Login/>}/>
+                        <Route path="/signup" element={<Register/>}/>
+                        <Route path="/movies" element=<Movies handleLikeClick={handleLikeClick} /> />
+                        <Route path="/saved-movies" element={<SavedMovies/>} handleRemoveCard={handleRemoveCard}/>
+                        <Route path="/profile" element={<Profile/>}/>
+                        <Route path="/*" element={< NotFoundPage/>}/>
+                    </Routes>
 
 
-                {pathPageWithFooter.includes(location.pathname) && <Footer/>}
-            </div>
+                    {pathPageWithFooter.includes(location.pathname) && <Footer/>}
+                </div>
+            </SavedMoviesContext.Provider>
         </CurrentUserContext.Provider>
     )
         ;
