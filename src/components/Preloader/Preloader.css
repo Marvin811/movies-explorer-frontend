@@ -43,6 +43,8 @@
     width: 396px;
     height: 234px;
     z-index: 10;
+    display: flex;
+    justify-content: center;
 
 }
 
@@ -68,7 +70,7 @@
     position: absolute;
     top: 0;
     left: 0;
-    background: #3456F3;
+    background: #FAFAFA;
     border-radius: 50px;
 }
 
@@ -84,12 +86,12 @@
 }
 
 .preloader__round::after {
-    background: #ffffff;
+    background: #3456F3;
     animation: preloader-inside-white 1s ease-in-out infinite;
 }
 
 .preloader__round::before {
     z-index: 10;
-    background: #3456F3;
+    background: #FAFAFA;
     animation: preloader-inside-red 1s ease-in-out infinite;
 }

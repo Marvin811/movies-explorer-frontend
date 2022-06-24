@@ -23,7 +23,7 @@ function App() {
     const [currentUser, setCurrentUser] = useState({});
     const [savedMovies, setSavedMovies] = useState([]);
     const [serverError, setServerError] = useState({});
-    const [blockInput, setBlockInput] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
     const pathPageWithHeader = ['/'];
     const pathPageWithFooter = ['/', '/movies', '/saved-movies'];
     // Все что касается карточек
@@ -60,33 +60,41 @@ function App() {
     };
 
     const handleRegister = (name, email, password) => {
-        setBlockInput(true);
+        setServerError({});
         return mainApi.register(name, email, password)
             .then(() => {
                 mainApi.authorize(email, password)
                     .then(() => {
-                        navigate('/movies')
+                        setServerError({});
+                        setLoggedIn(true);
+                        navigate('/movies');
                     })
             })
             .catch((err) => {
-                console.log(err)
+                const textError = err === 'Ошибка: 409' ? 'Пользователь с таким E-mail уже сувещстует' :
+                    'При регистрации пользователя произошла ошибка';
+                setServerError({...serverError, signUp: textError})
             })
             .finally(() => {
-                setBlockInput(false);
+                setIsLoading(false);
             });
     }
 
     const handleLogin = (email, password) => {
+        setServerError({});
         return mainApi.authorize(email, password)
             .then(() => {
+                setServerError({});
                 setLoggedIn(true);
                 navigate('/movies');
             })
             .catch((err) => {
-              console.log(err)
+                const textError = err === 'Ошкибка: 401' ? 'Вы ввели неправильный E-mail или пароль' :
+                    'При авторизции произошла ошибка';
+                setServerError({...serverError, signIn: textError})
             })
             .finally(() => {
-                setBlockInput(false)
+                setIsLoading(false);
             });
     };
 
@@ -96,8 +104,24 @@ function App() {
                 setCurrentUser(response);
             })
             .catch((err) =>
-            console.log(err))
+                console.log(err))
     }
+
+    const handleClickSignInButton = (e, email, password) => {
+        e.preventDefault();
+
+        setIsLoading(true);
+        handleLogin(email, password);
+    }
+
+    const handleClickSignUpButton = (e, name, email, password) => {
+        e.preventDefault();
+
+        setIsLoading(true);
+        handleRegister(name, email, password)
+    }
+
+    const resetServerErr = () => setServerError({});
 
     return (
         <CurrentUserContext.Provider value={currentUser}>
@@ -106,14 +130,32 @@ function App() {
                     {pathPageWithHeader.includes(location.pathname) && <Header/>}
                     <Routes>
                         <Route path="/" element={<Main/>}/>
-                        <Route path="/signin" element={< Login/>}/>
-                        <Route path="/signup" element={<Register/>}/>
+                        <Route path="/signin" element={
+                            <Login
+                                resetServerErr={resetServerErr}
+                                handleSubmit={handleClickSignInButton}
+                                isLoading={isLoading}
+                                isLoggin={loggedIn}
+                                serverError={serverError.signIn}
+                            />
+                        }/>
+                        <Route path="/signup" element={
+                            <Register
+                                resetServerErr={resetServerErr}
+                                handleSubmit={handleClickSignUpButton}
+                                isLoading={isLoading}
+                                isLoggin={loggedIn}
+                                serverError={serverError.signIn}
+
+                            />
+                        }/>
                         <Route path="/movies" element={<Movies handleLikeClick={handleLikeClick}/>}/>
                         <Route path="/saved-movies" element={<SavedMovies handleRemoveCard={handleRemoveCard}/>}/>
                         <Route path="/profile" element={
                             <Profile
+                                handleSubmit={handleClickSignInButton}
                                 isLoading={isLoading}
-                                handleLogin={handleLogin}
+                                isLoggin={loggedIn}
                             />
                         }/>
                         <Route path="/*" element={< NotFoundPage/>}/>
