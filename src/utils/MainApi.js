@@ -88,11 +88,12 @@ class MainApi {
             .then(res => this._getResponseDate(res));
     }
 
-    register = (name, email, password) => {
+    register(name, email, password)  {
         return fetch(`${this._baseUrl}/signup`, {
             method: 'POST',
             credentials: 'include',
             headers: {
+                Accept: "application/json",
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
@@ -103,10 +104,11 @@ class MainApi {
         })
             .then(res => this._getResponseDate(res));
     }
-    authorize = (email, password) => {
+    authorize(email, password) {
         return fetch(`${this._baseUrl}/signin`, {
             method: 'POST',
             headers: {
+                Accept: "application/json",
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
@@ -116,10 +118,9 @@ class MainApi {
         })
             .then(res => this._getResponseDate(res));
     }
-}
 
 const mainApi = new MainApi({
-    baseUrl: 'https://movies-explorer.mavi.nomoreparties.sbs'
+    baseUrl: 'https://api.movies.mav1.nomoredomains.xyz'
 })
 
 export default mainApi;

@@ -14,7 +14,7 @@ export function Register({isLoggin, isLoading, handleSubmit, resetServerErr, ser
         resetServerErr();
     }, []);
 
-    const isFormInvalid = ((name.inputInvalid || email.inputInvalid || password.inputInvalid) || isLoading)
+    const isFormInvalid = ((name.inputInvalid || email.inputInvalid || password.inputInvalid) || isLoading);
 
 
     return (
