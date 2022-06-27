@@ -118,6 +118,7 @@ class MainApi {
         })
             .then(res => this._getResponseDate(res));
     }
+}
 
 const mainApi = new MainApi({
     baseUrl: 'https://api.movies.mav1.nomoredomains.xyz'
