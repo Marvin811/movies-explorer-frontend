@@ -21,7 +21,7 @@ export function Profile({handleButtonEdit, handleLogout, seccess, isLoading, ser
     }, [currentUser]);
 
 
-    const isFormInvalid = (((name.value === currentUser.name) && (email.value === currentUser.email) || (name.inputInvalid || email.inputInvalid) || isLoading))
+    const isFormInvalid = (((email.value === currentUser.email) && (name.value === currentUser.name)) || (name.inputInvalid || email.inputInvalid) || isLoading);
 
     return (
         <>

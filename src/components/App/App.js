@@ -11,7 +11,7 @@ import {Movies} from "../Movies/Movies";
 import {SavedMovies} from "../SavedMovies/SavedMovies";
 import {Profile} from "../Profile/Profile";
 import {NotFoundPage} from "../NotFoundPage/NotFoundPage";
-import mainApi from "../../utils/MainApi";
+import  * as MainApi from '../../utils/MainApi'
 import {SavedMoviesContext} from "../../contexts/SavedMoviesContext";
 import {useNavigate} from 'react-router';
 import {ProtectedRoute} from "../ProtectedRoute/ProtectedRoute";
@@ -20,7 +20,7 @@ function App() {
     const location = useLocation();
     const navigate = useNavigate();
 
-    const [loggedIn, setLoggedIn] = useState(false)
+    const [loggedIn, setLoggedIn] = useState(true)
     const [currentUser, setCurrentUser] = useState({});
     const [savedMovies, setSavedMovies] = useState([]);
     const [serverError, setServerError] = useState({});
@@ -29,24 +29,49 @@ function App() {
     const pathPageWithHeader = ['/'];
     const pathPageWithFooter = ['/', '/movies', '/saved-movies'];
     // Все что касается карточек
-    const [moviesInputValue, setMoviesInputValue] = React.useState("");
+     const [moviesInputValue, setMoviesInputValue] = useState("");
 
 
     useEffect(() => {
         if (loggedIn) {
-            mainApi.getSavedMovies()
-                .then((movies) => setSavedMovies(movies))
-                .catch((err) => `Ошибка ${err} при получении сохраненных фильмов`);
+            MainApi.getUserInfo(localStorage.jwt)
+                .then(() => {
+                    setLoggedIn(true);
+                })
+                .catch((err) => {
+                    setLoggedIn(false);
+                    console.log(err);
+                })
         }
-    }, [loggedIn]);
+    },[loggedIn])
 
     useEffect(() => {
         if (loggedIn) {
-            mainApi.getUserInfo()
-                .then((user) => setCurrentUser(user))
-                .catch((err) => `Ошибка ${err} при получении данных пользователя`);
+            MainApi.getUserInfo()
+                .then((userData) => {
+                    setCurrentUser(userData)
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
         }
     }, [loggedIn]);
+
+    // useEffect(() => {
+    //     if (loggedIn) {
+    //         MainApi.getSavedMovies()
+    //             .then((movies) => setSavedMovies(movies))
+    //             .catch((err) => `Ошибка ${err} при получении сохраненных фильмов`);
+    //     }
+    // }, [loggedIn]);
+    //
+    // useEffect(() => {
+    //     if (loggedIn) {
+    //         MainApi.getUserInfo()
+    //             .then((user) => setCurrentUser(user))
+    //             .catch((err) => `Ошибка ${err} при получении данных пользователя`);
+    //     }
+    // }, [loggedIn]);
 
 // оправить функцию filterRemovedCard
     const filterRemovedCard = (movie) => {
@@ -54,7 +79,7 @@ function App() {
     }
 
     const handleRemoveCard = (movie) => {
-        mainApi.removeMovie(movie.movieId)
+        MainApi.removeMovie(movie.movieId)
             .then(() => {
                 filterRemovedCard(movie);
             })
@@ -65,42 +90,63 @@ function App() {
         const movie = savedMovies.find((item) => +item.movieId === movieCard.id);
 
         if (movie) {
-            mainApi.removeMovie(movie._id)
+            MainApi.removeMovie(movie._id)
                 .then(() => {
                     filterRemovedCard(movieCard);
                 })
                 .catch((err) => `Ошибка ${err} при удалениии фильма из сохраненных`);
         } else {
-            mainApi.createMovie(movieCard)
+            MainApi.createMovie(movieCard)
                 .then((result) => setSavedMovies([...savedMovies, result]))
                 .catch((err) => `Ошибка ${err} при добавлении фильма в сохраненные`);
         }
     };
 
+    // const handleRegister = (name, email, password) => {
+    //     setServerError({});
+    //     mainApi.register(name, email, password)
+    //         .then(() => {
+    //             mainApi.authorize(email, password)
+    //                 .then(() => {
+    //                     setServerError({});
+    //                     setLoggedIn(true);
+    //                     navigate('/movies');
+    //                 })
+    //         })
+    //         .catch((err) => {
+    //             const textError = err === 'Ошибка: 409' ? 'Пользователь с таким E-mail уже сувещстует' :
+    //                 'При регистрации пользователя произошла ошибка';
+    //             setServerError({...serverError, signUp: textError})
+    //         })
+    //         .finally(() => {
+    //             setIsLoading(false);
+    //         });
+    // }
     const handleRegister = (name, email, password) => {
         setServerError({});
-        mainApi.register(name, email, password)
+        MainApi.register(name, email, password)
             .then(() => {
-                mainApi.authorize(email, password)
+                MainApi.authorize(email, password)
                     .then(() => {
                         setServerError({});
                         setLoggedIn(true);
                         navigate('/movies');
                     })
+                    .catch(() => 'При авторизации произошла ошибка');
             })
             .catch((err) => {
-                const textError = err === 'Ошибка: 409' ? 'Пользователь с таким E-mail уже сувещстует' :
+                const textError = err === 'Ошибка: 409' ?
+                    'Пользователь с таким email уже существует'
+                    :
                     'При регистрации пользователя произошла ошибка';
-                setServerError({...serverError, signUp: textError})
+                setServerError({...serverError, signUp: textError});
             })
-            .finally(() => {
-                setIsLoading(false);
-            });
-    }
+            .finally(() => setIsLoading(false));
+    };
 
     const handleLogin = (email, password) => {
         setServerError({});
-        mainApi.authorize(email, password)
+        MainApi.authorize(email, password)
             .then(() => {
                 setServerError({});
                 setLoggedIn(true);
@@ -119,7 +165,7 @@ function App() {
     const handleUpdateUser = (evt, name, email) => {
         evt.preventDefault();
         setServerError({});
-        mainApi.updateUserInfo(name, email)
+        MainApi.updateUserInfo(name, email)
             .then((result) => {
                 setSuccessUpdate('Данные успешно обновлены!');
                 setTimeout(() => setServerError(''), 2000);
@@ -152,23 +198,13 @@ function App() {
 
     const resetServerErr = () => setServerError({});
 
-    const handleLogout = () => {
-        mainApi.signout()
-            .then(() => {
-                localStorage.removeItem('movies');
-                localStorage.removeItem('reqData');
-                localStorage.removeItem('toggleState');
-                setLoggedIn(false);
-                navigate('/')
-            })
-            .catch(err => console.log(err));
-    }
 
     return (
-        <CurrentUserContext.Provider value={currentUser}>
-            <SavedMoviesContext.Provider value={savedMovies}>
-                <div className="page">
-                    {pathPageWithHeader.includes(location.pathname) && <Header/>}
+        <div className="page">
+            <CurrentUserContext.Provider value={currentUser}>
+                <SavedMoviesContext.Provider value={savedMovies}>
+
+                    {pathPageWithHeader.includes(location.pathname) && <Header loggedIn={loggedIn}/>}
                     <Routes>
                         <Route path="/" element={<Main/>}/>
                         <Route path="/movies" element={
@@ -184,7 +220,6 @@ function App() {
                             <ProtectedRoute isLoggin={loggedIn}>
                                 <Profile
                                     handleButtonEdit={handleUpdateUser}
-                                    handleLogout={handleLogout}
                                     isLoading={isLoading}
                                     serverError={serverError.profile}
                                     success={successUpdate}
@@ -215,9 +250,10 @@ function App() {
 
 
                     {pathPageWithFooter.includes(location.pathname) && <Footer/>}
-                </div>
-            </SavedMoviesContext.Provider>
-        </CurrentUserContext.Provider>
+
+                </SavedMoviesContext.Provider>
+            </CurrentUserContext.Provider>
+        </div>
     )
         ;
 }

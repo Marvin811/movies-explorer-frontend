@@ -1,9 +1,10 @@
 class MoviesApi {
-    constructor({baseUrl}) {
+    constructor({baseUrl, token}) {
         this._baseUrl = baseUrl;
+        this._token = token;
     }
 
-    _getResponseData(res) {
+    _getResponseDate(res) {
         if (res.ok) {
             return res.json();
         }
@@ -11,10 +12,10 @@ class MoviesApi {
     }
 
     getAllMovies() {
-        return fetch(`${this._baseUrl}/beatfilm-movies`, {
-            method: 'GET',
-        })
-            .then(res => this._getResponseData(res));
+        return fetch(`${this._baseUrl}/beatfilm-movies`), {
+            method: "GET",
+        }
+            .then(res => this._getResponseDate(res));
     }
 }
 

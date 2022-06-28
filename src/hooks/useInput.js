@@ -1,5 +1,6 @@
-import React, {useState, useEffect} from 'react';
 import {useValidation} from './useValidation';
+import  {useEffect, useState} from "react";
+
 
 export const useInput = (initialValue, inputName) => {
     const [value, setValue] = useState(initialValue);
