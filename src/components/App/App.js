@@ -20,7 +20,7 @@ function App() {
     const location = useLocation();
     const navigate = useNavigate();
 
-    const [loggedIn, setLoggedIn] = useState(true)
+    const [loggedIn, setLoggedIn] = useState(false)
     const [currentUser, setCurrentUser] = useState({});
     const [savedMovies, setSavedMovies] = useState([]);
     const [serverError, setServerError] = useState({});
@@ -182,19 +182,19 @@ function App() {
             .finally(() => setIsLoading(false));
     };
 
-    const handleClickSignInButton = (e, email, password) => {
-        e.preventDefault();
-
-        setIsLoading(true);
-        handleLogin(email, password);
-    }
-
-    const handleClickSignUpButton = (e, name, email, password) => {
-        e.preventDefault();
-
-        setIsLoading(true);
-        handleRegister(name, email, password)
-    }
+    // const handleClickSignInButton = (evt, email, password) => {
+    //     evt.preventDefault();
+    //
+    //     setIsLoading(true);
+    //     handleLogin(email, password);
+    // }
+    //
+    // const handleClickSignUpButton = (evt, name, email, password) => {
+    //     evt.preventDefault();
+    //
+    //     setIsLoading(true);
+    //     handleRegister(name, email, password)
+    // }
 
     const resetServerErr = () => setServerError({});
 
@@ -229,7 +229,7 @@ function App() {
                         <Route path="/signin" element={
                             <Login
                                 resetServerErr={resetServerErr}
-                                handleSubmit={handleClickSignInButton}
+                                handleSubmit={handleLogin}
                                 isLoading={isLoading}
                                 isLoggin={loggedIn}
                                 serverError={serverError.signIn}
@@ -238,7 +238,7 @@ function App() {
                         <Route path="/signup" element={
                             <Register
                                 resetServerErr={resetServerErr}
-                                handleSubmit={handleClickSignUpButton}
+                                handleSubmit={handleRegister}
                                 isLoading={isLoading}
                                 isLoggin={loggedIn}
                                 serverError={serverError.signIn}

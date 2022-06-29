@@ -1,14 +1,12 @@
 export const BASE_URL = "https://api.movies.mav1.nomoredomains.xyz";
 export const FILM_URL = "https://api.nomoreparties.co";
 
-async function getResponseData(result) {
-    const res = await result.json();
-    if (result.ok) {
-        return res;
-    } else {
-        return Promise.reject(res);
+const checkResponse = (response) => {
+    if (response.ok) {
+        return response.json();
     }
-}
+    return Promise.reject(`Ошибка ${response.status}`);
+};
 
 export const getUserInfo = (jwt) => {
     return fetch(`${BASE_URL}/users/me`, {
@@ -18,14 +16,7 @@ export const getUserInfo = (jwt) => {
             "Content-Type": "application/json",
         },
     })
-        .then((response) => {
-            return getResponseData(response);
-        })
-        .then((res) => {
-            if (res) {
-                return res;
-            }
-        });
+        .then(checkResponse);
 };
 
 
@@ -41,14 +32,7 @@ export const updateUserInfo = (name, email) => {
             email,
         })
     })
-        .then((response) => {
-            return getResponseData(response);
-        })
-        .then((res) => {
-            if (res) {
-                return res;
-            }
-        });
+        .then(checkResponse);
 };
 
 export const createMovie = (movieData) => {
@@ -72,12 +56,7 @@ export const createMovie = (movieData) => {
             movieId: movieData.id.toString(),
         }),
     })
-        .then((response) => {
-            return getResponseData(response);
-        })
-        .then((data) => {
-            return data;
-        });
+        .then(checkResponse);
 };
 
 export const getSavedMovies = () => {
@@ -89,12 +68,7 @@ export const getSavedMovies = () => {
             "Content-Type": "application/json",
         },
     })
-        .then((response) => {
-            return getResponseData(response);
-        })
-        .then((data) => {
-            return data;
-        });
+        .then(checkResponse);
 };
 
 export const removeMovie = (id) => {
@@ -106,18 +80,12 @@ export const removeMovie = (id) => {
             "Content-Type": "application/json",
         },
     })
-        .then((response) => {
-            return getResponseData(response);
-        })
-        .then((data) => {
-            return data;
-        });
+        .then(checkResponse);
 };
 
 export const register = (name, email, password) => {
     return fetch(`${BASE_URL}/signup`, {
         method: "POST",
-        credentials: "include",
         headers: {
             "Content-Type": "application/json",
         },
@@ -127,12 +95,7 @@ export const register = (name, email, password) => {
             password,
         }),
     })
-        .then((response) => {
-            return getResponseData(response);
-        })
-        .then((data) => {
-            return data;
-        });
+        .then(checkResponse);
 };
 
 export const authorize = (email, password) => {
@@ -147,10 +110,5 @@ export const authorize = (email, password) => {
             password,
         }),
     })
-        .then((response) => {
-            return getResponseData(response);
-        })
-        .then((data) => {
-            return data
-        })
+        .then(checkResponse);
 }
