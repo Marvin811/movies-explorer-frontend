@@ -41,7 +41,7 @@ export default function Navigation() {
                 <Burger openBurger={openBurger} />
                     <SlideMenu isOpen={isOpen} onClose={closeAllPopups} />
                 </>
-            ) : (<section className="navigation-header">
+            ) : (<nav className="navigation-header">
                 <Logo/>
                 <div className="navigation-header__links">
                     <NavLink to="/movies" className={setActive}>
@@ -55,7 +55,7 @@ export default function Navigation() {
                     <p className='navigation__profile-text'>Аккаунт</p>
                     <img src={icon}  className="navigation-header__icon" alt="Изображение кнопки Аккаунт"></img>
                 </NavLink>
-            </section>
+            </nav>
             )}
         </>
 

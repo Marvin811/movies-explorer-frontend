@@ -80,10 +80,12 @@
     margin: 209px 0 16px 0;
     padding: 0;
     z-index: 1;
+    cursor: pointer;
 }
 
-.authorization__submit-reg {
-    margin: 150px 0 16px 0;
+.authorization__submit:disabled {
+    opacity: .3;
+    cursor: revert;
 }
 
 .authorization__caption {

@@ -102,26 +102,6 @@ function App() {
         }
     };
 
-    // const handleRegister = (name, email, password) => {
-    //     setServerError({});
-    //     mainApi.register(name, email, password)
-    //         .then(() => {
-    //             mainApi.authorize(email, password)
-    //                 .then(() => {
-    //                     setServerError({});
-    //                     setLoggedIn(true);
-    //                     navigate('/movies');
-    //                 })
-    //         })
-    //         .catch((err) => {
-    //             const textError = err === 'Ошибка: 409' ? 'Пользователь с таким E-mail уже сувещстует' :
-    //                 'При регистрации пользователя произошла ошибка';
-    //             setServerError({...serverError, signUp: textError})
-    //         })
-    //         .finally(() => {
-    //             setIsLoading(false);
-    //         });
-    // }
     const handleRegister = (name, email, password) => {
         setServerError({});
         MainApi.register(name, email, password)
@@ -182,19 +162,19 @@ function App() {
             .finally(() => setIsLoading(false));
     };
 
-    // const handleClickSignInButton = (evt, email, password) => {
-    //     evt.preventDefault();
-    //
-    //     setIsLoading(true);
-    //     handleLogin(email, password);
-    // }
-    //
-    // const handleClickSignUpButton = (evt, name, email, password) => {
-    //     evt.preventDefault();
-    //
-    //     setIsLoading(true);
-    //     handleRegister(name, email, password)
-    // }
+    const handleClickSignInButton = (evt, email, password) => {
+        evt.preventDefault();
+
+        setIsLoading(true);
+        handleLogin(email, password);
+    }
+
+    const handleClickSignUpButton = (evt, name, email, password) => {
+        evt.preventDefault();
+
+        setIsLoading(true);
+        handleRegister(name, email, password)
+    }
 
     const resetServerErr = () => setServerError({});
 
@@ -229,7 +209,7 @@ function App() {
                         <Route path="/signin" element={
                             <Login
                                 resetServerErr={resetServerErr}
-                                handleSubmit={handleLogin}
+                                handleSubmit={handleClickSignInButton}
                                 isLoading={isLoading}
                                 isLoggin={loggedIn}
                                 serverError={serverError.signIn}
@@ -238,10 +218,10 @@ function App() {
                         <Route path="/signup" element={
                             <Register
                                 resetServerErr={resetServerErr}
-                                handleSubmit={handleRegister}
+                                handleSubmit={handleClickSignUpButton}
                                 isLoading={isLoading}
                                 isLoggin={loggedIn}
-                                serverError={serverError.signIn}
+                                serverError={serverError.signUp}
 
                             />
                         }/>
