@@ -11,16 +11,19 @@ import {Movies} from "../Movies/Movies";
 import {SavedMovies} from "../SavedMovies/SavedMovies";
 import {Profile} from "../Profile/Profile";
 import {NotFoundPage} from "../NotFoundPage/NotFoundPage";
-import  * as MainApi from '../../utils/MainApi'
+import * as MainApi from '../../utils/MainApi';
+import * as MainApiAuth from '../../utils/MainApiAuth';
 import {SavedMoviesContext} from "../../contexts/SavedMoviesContext";
 import {useNavigate} from 'react-router';
 import {ProtectedRoute} from "../ProtectedRoute/ProtectedRoute";
+
 
 function App() {
     const location = useLocation();
     const navigate = useNavigate();
 
-    const [loggedIn, setLoggedIn] = useState(false)
+    const [loggedIn, setLoggedIn] = useState(false);
+    const [userData, setUserData] = useState({});
     const [currentUser, setCurrentUser] = useState({});
     const [savedMovies, setSavedMovies] = useState([]);
     const [serverError, setServerError] = useState({});
@@ -29,49 +32,66 @@ function App() {
     const pathPageWithHeader = ['/'];
     const pathPageWithFooter = ['/', '/movies', '/saved-movies'];
     // Все что касается карточек
-     const [moviesInputValue, setMoviesInputValue] = useState("");
+    const [moviesInputValue, setMoviesInputValue] = useState("");
+
+
+    useEffect(() => {
+        checkToken()
+    }, []);
 
 
     useEffect(() => {
         if (loggedIn) {
-            MainApi.getUserInfo(localStorage.jwt)
-                .then(() => {
-                    setLoggedIn(true);
-                })
-                .catch((err) => {
-                    setLoggedIn(false);
-                    console.log(err);
-                })
-        }
-    },[loggedIn])
-
-    useEffect(() => {
-        if (loggedIn) {
-            MainApi.getUserInfo()
-                .then((userData) => {
-                    setCurrentUser(userData)
-                })
-                .catch((err) => {
-                    console.log(err)
-                })
+            MainApi.getSavedMovies()
+                .then((movies) => setSavedMovies([movies]))
+                .catch((err) => `Ошибка ${err} при получении сохраненных фильмов`);
         }
     }, [loggedIn]);
-
-    // useEffect(() => {
-    //     if (loggedIn) {
-    //         MainApi.getSavedMovies()
-    //             .then((movies) => setSavedMovies(movies))
-    //             .catch((err) => `Ошибка ${err} при получении сохраненных фильмов`);
-    //     }
-    // }, [loggedIn]);
     //
     // useEffect(() => {
     //     if (loggedIn) {
     //         MainApi.getUserInfo()
-    //             .then((user) => setCurrentUser(user))
+    //             .then((user) => {
+    //                 setCurrentUser(user)
+    //                 setLoggedIn(true)
+    //
+    //             })
     //             .catch((err) => `Ошибка ${err} при получении данных пользователя`);
     //     }
     // }, [loggedIn]);
+
+    useEffect(() => {
+        if (loggedIn===true && localStorage.getItem("token")) {
+            MainApi.getUserInfo()
+                .then((userData) => {
+                    setCurrentUser(userData);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        }
+    }, [loggedIn, userData]);
+
+    const checkToken = () => {
+        let jwt = localStorage.getItem("jwt");
+        if (jwt) {
+            MainApiAuth.getCurrentUserInfo(jwt)
+                .then((res) => {
+                    if (res) {
+                        setUserData({ name: res.name, email: res.email});
+                        navigate(location);
+                        setLoggedIn(true);
+                    } else {
+                        setLoggedIn(false);
+                    }
+                })
+                .catch(e => {
+                    console.log(`С токеном что-то не так: ${e}`);
+                    setLoggedIn(false);
+                })
+        }
+    }
+
 
 // оправить функцию filterRemovedCard
     const filterRemovedCard = (movie) => {
@@ -104,10 +124,11 @@ function App() {
 
     const handleRegister = (name, email, password) => {
         setServerError({});
-        MainApi.register(name, email, password)
+        MainApiAuth.register(name, email, password)
             .then(() => {
-                MainApi.authorize(email, password)
+                MainApiAuth.authorize(email, password)
                     .then(() => {
+                        setUserData({ name: name, email: email});
                         setServerError({});
                         setLoggedIn(true);
                         navigate('/movies');
@@ -126,7 +147,7 @@ function App() {
 
     const handleLogin = (email, password) => {
         setServerError({});
-        MainApi.authorize(email, password)
+        MainApiAuth.authorize(email, password)
             .then(() => {
                 setServerError({});
                 setLoggedIn(true);
@@ -178,6 +199,13 @@ function App() {
 
     const resetServerErr = () => setServerError({});
 
+    function handleLoggedOut(evt) {
+        evt.preventDefault();
+        localStorage.removeItem("jwt");
+        setLoggedIn(false);
+        navigate("/", {replace: false});
+    }
+
 
     return (
         <div className="page">
@@ -203,6 +231,7 @@ function App() {
                                     isLoading={isLoading}
                                     serverError={serverError.profile}
                                     success={successUpdate}
+                                    handleLoggedOut={handleLoggedOut}
                                     resetServerErr={resetServerErr}
                                 />
                             </ProtectedRoute>}/>

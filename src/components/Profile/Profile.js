@@ -5,7 +5,7 @@ import {useInput} from "../../hooks/useInput";
 import {CurrentUserContext} from "../../contexts/CurrentUserContext";
 import Preloader from "../Preloader/Preloader";
 
-export function Profile({handleButtonEdit, handleLogout, seccess, isLoading, serverError, resetServerErr}) {
+export function Profile({handleButtonEdit, handleLoggedOut, seccess, isLoading, serverError, resetServerErr}) {
     const currentUser = useContext(CurrentUserContext);
 
     const name = useInput('', 'name');
@@ -67,7 +67,7 @@ export function Profile({handleButtonEdit, handleLogout, seccess, isLoading, ser
                         </button>
                         <button className="profile__button"
                                 type="button"
-                                onClick={handleLogout}
+                                onClick={handleLoggedOut}
                                 to="/">Выйти из аккаунта</button>
                     </div>
                 </form>

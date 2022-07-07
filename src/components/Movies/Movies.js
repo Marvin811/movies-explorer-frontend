@@ -24,6 +24,7 @@ export function Movies({ handleLikeClick }) {
     const [responseText, setResponseText] = useState('');
     const [isEnableShortMovies, setIsEnableShortMovies] = useState(JSON.parse(localStorage.getItem('toggleState')) || false);
     const [searchQuery, setSearchQuery] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
     const handleClickButton = () => {
         const width = cardCount + ((windowWidth >= DESKTOP_WIDTH) ? NUMBER_OF_CARDS_TO_BE_ADDED_ON_DESKTOP : NUMBER_OF_CARDS_TO_BE_ADDED_ON_MOBILE);
         setCardCount(width);
@@ -91,7 +92,7 @@ export function Movies({ handleLikeClick }) {
 
     const handleSearchButton = (e) => {
         e.preventDefault();
-
+        setIsLoading(true);
         if (!localStorage.movies) {
             moviesApi.getAllMovies()
                 .then((data) => {

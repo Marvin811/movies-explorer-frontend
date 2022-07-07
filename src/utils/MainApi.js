@@ -1,5 +1,5 @@
-export const BASE_URL = "https://api.movies.mav1.nomoredomains.xyz";
-export const FILM_URL = "https://api.nomoreparties.co";
+import {BASE_URL} from "./const";
+import {FILM_URL} from "./const";
 
 const checkResponse = (response) => {
     if (response.ok) {
@@ -8,13 +8,14 @@ const checkResponse = (response) => {
     return Promise.reject(`Ошибка ${response.status}`);
 };
 
-export const getUserInfo = (jwt) => {
+export const getUserInfo = () => {
     return fetch(`${BASE_URL}/users/me`, {
-        method: "GET",
+        method: 'GET',
         headers: {
-            authorization: `Bearer ${localStorage.getItem("jwt")}`,
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
         },
+        credentials: 'include',
+
     })
         .then(checkResponse);
 };
@@ -24,7 +25,6 @@ export const updateUserInfo = (name, email) => {
     return fetch(`${BASE_URL}/users/me`, {
         method: 'PATCH',
         headers: {
-            authorization: `Bearer ${localStorage.getItem("jwt")}`,
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
@@ -37,9 +37,9 @@ export const updateUserInfo = (name, email) => {
 
 export const createMovie = (movieData) => {
     return fetch(`${BASE_URL}/movies`, {
+        credentials: 'include',
         method: 'POST',
         headers: {
-            authorization: `Bearer ${localStorage.getItem("token")}`,
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
@@ -61,12 +61,8 @@ export const createMovie = (movieData) => {
 
 export const getSavedMovies = () => {
     return fetch(`${BASE_URL}/movies`, {
-        method: "GET",
-        credentials: "include",
-        headers: {
-            authorization: `Bearer ${localStorage.getItem("jwt")}`,
-            "Content-Type": "application/json",
-        },
+        credentials: 'include',
+        method: 'GET',
     })
         .then(checkResponse);
 };
@@ -76,39 +72,8 @@ export const removeMovie = (id) => {
         method: "DELETE",
         credentials: "include",
         headers: {
-            authorization: `Bearer ${localStorage.getItem("jwt")}`,
-            "Content-Type": "application/json",
-        },
+            'Content-Type': 'application/json'
+        }
     })
         .then(checkResponse);
 };
-
-export const register = (name, email, password) => {
-    return fetch(`${BASE_URL}/signup`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            name,
-            email,
-            password,
-        }),
-    })
-        .then(checkResponse);
-};
-
-export const authorize = (email, password) => {
-    return fetch(`${BASE_URL}/signin`, {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json",
-            'Access-Control-Allow-Origin': 'https://api.movies.mav1.nomoredomains.xyz',
-        },
-        body: JSON.stringify({
-            email,
-            password,
-        }),
-    })
-        .then(checkResponse);
-}
