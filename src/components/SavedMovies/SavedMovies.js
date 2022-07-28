@@ -1,13 +1,11 @@
 import React, {useContext, useEffect, useState} from "react";
-import './SavedMovies.css';
-import Navigation from "../Navigation/Navigation";
 import {SearchForm} from "../Movies/SearchForm/SearchForm";
 import {MoviesCardList} from "../Movies/MoviesCardList/MoviesCardList";
 import {SavedMoviesContext} from "../../contexts/SavedMoviesContext";
 import {filterMovies, filterShortMovies} from '../../utils/searchFilter';
 
 
-export function SavedMovies({handleRemoveCard}) {
+export function SavedMovies({handleRemoveButton}) {
     const savedMovies = useContext(SavedMoviesContext);
     const [dataMovies, setDataMovies] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
@@ -55,16 +53,21 @@ export function SavedMovies({handleRemoveCard}) {
 
     return (
         <div>
-            <Navigation/>
             <SearchForm
+
                 searchQuery={searchQuery}
                 handleSearchQuery={(e) => setSearchQuery((e.target.value))}
                 switchShortMovie={switchShortMovie}
                 handleSearchButton={handleSearchButton}
             />
-            <MoviesCardList
-                handleRemoveCard={handleRemoveCard}
-                movies={dataMovies}/>
+            {responseText ?
+                (<span className="movies__not-found">{responseText}</span>)
+                : (<MoviesCardList
+                    handleRemoveButton={handleRemoveButton}
+                    isSaved
+                    movies={dataMovies}/>)
+            }
+
         </div>
     )
 }

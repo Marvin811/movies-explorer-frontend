@@ -1,7 +1,7 @@
 import React from "react";
 import "./FilterCheckbox.css";
 
-function Checkbox({ switchShortMovie, isActive }) {
+function Checkbox({switchShortMovie, isActive}) {
     return (
         <input
             type="checkbox"

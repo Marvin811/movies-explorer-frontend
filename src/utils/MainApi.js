@@ -1,79 +1,99 @@
-import {BASE_URL} from "./const";
-import {FILM_URL} from "./const";
-
-const checkResponse = (response) => {
-    if (response.ok) {
-        return response.json();
+class MainApi {
+    constructor({address}) {
+        this._address = address;
     }
-    return Promise.reject(`Ошибка ${response.status}`);
-};
 
-export const getUserInfo = () => {
-    return fetch(`${BASE_URL}/users/me`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-
-    })
-        .then(checkResponse);
-};
-
-
-export const updateUserInfo = (name, email) => {
-    return fetch(`${BASE_URL}/users/me`, {
-        method: 'PATCH',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            name,
-            email,
-        })
-    })
-        .then(checkResponse);
-};
-
-export const createMovie = (movieData) => {
-    return fetch(`${BASE_URL}/movies`, {
-        credentials: 'include',
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            country: movieData.country,
-            director: movieData.director,
-            duration: movieData.duration,
-            year: movieData.year,
-            description: movieData.description,
-            trailerLink: movieData.trailerLink,
-            nameRU: movieData.nameRU,
-            nameEN: movieData.nameEN || ' ',
-            image: `${FILM_URL + movieData.image.url}`,
-            thumbnail: movieData.thumbnail,
-            movieId: movieData.id.toString(),
-        }),
-    })
-        .then(checkResponse);
-};
-
-export const getSavedMovies = () => {
-    return fetch(`${BASE_URL}/movies`, {
-        credentials: 'include',
-        method: 'GET',
-    })
-        .then(checkResponse);
-};
-
-export const removeMovie = (id) => {
-    return fetch(`${BASE_URL}/movies/${id}`, {
-        method: "DELETE",
-        credentials: "include",
-        headers: {
-            'Content-Type': 'application/json'
+    _handleResponse = (response) => {
+        if (response.ok) {
+            return response.json();
         }
-    })
-        .then(checkResponse);
-};
+        return Promise.reject(`Ошибка: ${response.status}`);
+    }
+
+    getSavedMovies() {
+        return fetch(this._address + "/movies", {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+                "Content-Type": "application/json",
+                'Accept': 'application/json',
+            },
+        })
+            .then(this._handleResponse);
+    }
+
+    addSavedMovie(movieData) {
+        return fetch(this._address + "/movies", {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+                "Content-Type": "application/json",
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                country: movieData.country,
+                director: movieData.director,
+                duration: movieData.duration,
+                year: movieData.year,
+                description: movieData.description,
+                trailerLink: movieData.trailerLink || 'https://movies-explorer.mavi.nomoreparties.sbs/404',
+                nameRU: movieData.nameRU,
+                nameEN: movieData.nameEN || ' ',
+                image: 'https://api.nomoreparties.co' + movieData.image.url,
+                thumbnail: 'https://api.nomoreparties.co' + movieData.image.formats.thumbnail.url,
+                movieId: movieData.id.toString(),
+            }),
+        })
+            .then(this._handleResponse)
+    }
+
+    getUserInfo() {
+        return fetch(`${this._address}/users/me`, {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+                "Content-Type": "application/json",
+                'Accept': 'application/json'
+            },
+        })
+            .then(this._handleResponse);
+    }
+
+    changeUserInfo(data) {
+        return fetch(`${this._address}/users/me`, {
+            method: "PATCH",
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+                "Content-Type": "application/json",
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                name: data.name,
+                email: data.email,
+            })
+        })
+            .then(this._handleResponse);
+
+    }
+
+    deleteCard(movieID) {
+        return fetch(`${this._address}/movies/${movieID}`, {
+            method: "DELETE",
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+                "Content-Type": "application/json",
+                'Accept': 'application/json'
+            },
+        })
+            .then(this._handleResponse);
+    }
+
+
+}
+
+
+const mainApi = new MainApi({
+    address: 'https://api.movies.mav1.nomoredomains.xyz',
+});
+
+export default mainApi

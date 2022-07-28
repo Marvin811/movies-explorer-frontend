@@ -11,6 +11,19 @@
     align-self: center;
 }
 
+.movies__not-found {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0 0;
+    font-size: 18px;
+    line-height: 24px;
+    text-align: center;
+}
+
+.movies-block {
+    margin: 0 auto;
+}
+
 @media screen and (max-width: 768px) {
     .card-list__container {
         padding-left: 30px;

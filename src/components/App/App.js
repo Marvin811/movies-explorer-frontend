@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import {Route, Routes, useLocation} from "react-router-dom";
 import './App.css';
 import {CurrentUserContext} from "../../contexts/CurrentUserContext";
+import {SavedMoviesContext} from "../../contexts/SavedMoviesContext";
 import {Header} from "../Header/Header";
 import {Main} from "../Main/Main";
 import {Footer} from "../Footer/Footer";
@@ -11,58 +12,39 @@ import {Movies} from "../Movies/Movies";
 import {SavedMovies} from "../SavedMovies/SavedMovies";
 import {Profile} from "../Profile/Profile";
 import {NotFoundPage} from "../NotFoundPage/NotFoundPage";
-import * as MainApi from '../../utils/MainApi';
-import * as MainApiAuth from '../../utils/MainApiAuth';
-import {SavedMoviesContext} from "../../contexts/SavedMoviesContext";
 import {useNavigate} from 'react-router';
-import {ProtectedRoute} from "../ProtectedRoute/ProtectedRoute";
+import ProtectedRoutes from "../ProtectedRoute/ProtectedRoutes";
+import mainApi from "../../utils/MainApi";
 
+import * as auth from "../../utils/MainApiAuth";
 
 function App() {
-    const location = useLocation();
+
+    let location = useLocation();
     const navigate = useNavigate();
-
-    const [loggedIn, setLoggedIn] = useState(false);
     const [userData, setUserData] = useState({});
+    const [loggedIn, setLoggedIn] = useState(false);
     const [currentUser, setCurrentUser] = useState({});
-    const [savedMovies, setSavedMovies] = useState([]);
-    const [serverError, setServerError] = useState({});
-    const [isLoading, setIsLoading] = useState(false)
+    const [isLoading, setIsLoading] = useState(false);
+    const [serverError, setServerError] = useState({})
     const [successUpdate, setSuccessUpdate] = useState('');
-    const pathPageWithHeader = ['/'];
-    const pathPageWithFooter = ['/', '/movies', '/saved-movies'];
-    // Все что касается карточек
-    const [moviesInputValue, setMoviesInputValue] = useState("");
+    const [savedMovies, setSavedMovies] = useState([]);
+
+    useEffect(() => {
+        tokenCheck()
+    }, [])
+
+    useEffect(() => {
+        const locations = ["/signup", "/signin"];
+        if (loggedIn && (locations.includes(location.pathname))) {
+            navigate("/");
+        } else navigate(location.pathname);
+    }, [loggedIn, location.pathname, navigate])
 
 
     useEffect(() => {
-        checkToken()
-    }, []);
-
-
-    useEffect(() => {
-        if (loggedIn) {
-            MainApi.getSavedMovies()
-                .then((movies) => setSavedMovies([movies]))
-                .catch((err) => `Ошибка ${err} при получении сохраненных фильмов`);
-        }
-    }, [loggedIn]);
-    //
-    // useEffect(() => {
-    //     if (loggedIn) {
-    //         MainApi.getUserInfo()
-    //             .then((user) => {
-    //                 setCurrentUser(user)
-    //                 setLoggedIn(true)
-    //
-    //             })
-    //             .catch((err) => `Ошибка ${err} при получении данных пользователя`);
-    //     }
-    // }, [loggedIn]);
-
-    useEffect(() => {
-        if (loggedIn===true && localStorage.getItem("token")) {
-            MainApi.getUserInfo()
+        if (loggedIn === true && localStorage.getItem("token")) {
+            mainApi.getUserInfo()
                 .then((userData) => {
                     setCurrentUser(userData);
                 })
@@ -72,107 +54,53 @@ function App() {
         }
     }, [loggedIn, userData]);
 
-    const checkToken = () => {
-        let jwt = localStorage.getItem("jwt");
-        if (jwt) {
-            MainApiAuth.getCurrentUserInfo(jwt)
-                .then((res) => {
-                    if (res) {
-                        setUserData({ name: res.name, email: res.email});
-                        navigate(location);
-                        setLoggedIn(true);
-                    } else {
-                        setLoggedIn(false);
-                    }
-                })
-                .catch(e => {
-                    console.log(`С токеном что-то не так: ${e}`);
-                    setLoggedIn(false);
-                })
+    useEffect(() => {
+        if (loggedIn) {
+            mainApi.getSavedMovies()
+                .then((movies) => setSavedMovies(movies))
+                .catch((err) => `Ошибка ${err} при получении сохраненных фильмов`);
         }
-    }
+    }, [loggedIn]);
 
-
-// оправить функцию filterRemovedCard
     const filterRemovedCard = (movie) => {
         setSavedMovies((savedMovies) => savedMovies.filter((item) => +item.movieId !== +movie.id));
-    }
+    };
 
-    const handleRemoveCard = (movie) => {
-        MainApi.removeMovie(movie.movieId)
+    function handleCardDelete(movie) {
+        mainApi.deleteCard(movie.movieId)
             .then(() => {
                 filterRemovedCard(movie);
             })
-            .catch((err) => `Ошибка ${err} при удалении фильма из сохраненных`);
-    };
+            .catch((err) => `Ошибка ${err} при удалениии фильма из сохраненных`);
+    }
 
-    const handleLikeClick = (movieCard) => {
+    function handleCardAdd(movieCard) {
         const movie = savedMovies.find((item) => +item.movieId === movieCard.id);
 
         if (movie) {
-            MainApi.removeMovie(movie._id)
+            mainApi.deleteCard(movie._id)
                 .then(() => {
                     filterRemovedCard(movieCard);
                 })
                 .catch((err) => `Ошибка ${err} при удалениии фильма из сохраненных`);
         } else {
-            MainApi.createMovie(movieCard)
+            mainApi.addSavedMovie(movieCard)
                 .then((result) => setSavedMovies([...savedMovies, result]))
                 .catch((err) => `Ошибка ${err} при добавлении фильма в сохраненные`);
         }
-    };
+    }
 
-    const handleRegister = (name, email, password) => {
+    // готовый код не трогать !!!//
+    function handleUpdateUser(userData) {
+        setIsLoading(true);
         setServerError({});
-        MainApiAuth.register(name, email, password)
-            .then(() => {
-                MainApiAuth.authorize(email, password)
-                    .then(() => {
-                        setUserData({ name: name, email: email});
-                        setServerError({});
-                        setLoggedIn(true);
-                        navigate('/movies');
-                    })
-                    .catch(() => 'При авторизации произошла ошибка');
-            })
-            .catch((err) => {
-                const textError = err === 'Ошибка: 409' ?
-                    'Пользователь с таким email уже существует'
-                    :
-                    'При регистрации пользователя произошла ошибка';
-                setServerError({...serverError, signUp: textError});
-            })
-            .finally(() => setIsLoading(false));
-    };
-
-    const handleLogin = (email, password) => {
-        setServerError({});
-        MainApiAuth.authorize(email, password)
-            .then(() => {
-                setServerError({});
-                setLoggedIn(true);
-                navigate('/movies');
-            })
-            .catch((err) => {
-                const textError = err === 'Ошкибка: 401' ? 'Вы ввели неправильный E-mail или пароль' :
-                    'При авторизции произошла ошибка';
-                setServerError({...serverError, signIn: textError})
-            })
-            .finally(() => {
-                setIsLoading(false);
-            });
-    };
-
-    const handleUpdateUser = (evt, name, email) => {
-        evt.preventDefault();
-        setServerError({});
-        MainApi.updateUserInfo(name, email)
+        return mainApi
+            .changeUserInfo(userData)
             .then((result) => {
+                setCurrentUser(result);
                 setSuccessUpdate('Данные успешно обновлены!');
                 setTimeout(() => setServerError(''), 2000);
                 setServerError({});
-                setCurrentUser(result);
-
             })
             .catch((err) => {
                 const textError = err === 'Ошибка: 409' ?
@@ -181,85 +109,137 @@ function App() {
                 setServerError({...serverError, profile: textError});
             })
             .finally(() => setIsLoading(false));
-    };
-
-    const handleClickSignInButton = (evt, email, password) => {
-        evt.preventDefault();
-
-        setIsLoading(true);
-        handleLogin(email, password);
     }
 
-    const handleClickSignUpButton = (evt, name, email, password) => {
-        evt.preventDefault();
 
+    function handleRegister(name, email, password) {
+        setServerError({});
         setIsLoading(true);
-        handleRegister(name, email, password)
+        return auth
+            .register(name, email, password)
+            .then(() => {
+                handleLogin(email, password)
+                setServerError({});
+                setUserData({name: name, email: email});
+                setLoggedIn(true);
+                navigate("/movies");
+            })
+            .catch((err) => {
+                const textError = err === 'Ошибка: 409' ?
+                    'При регистрации пользователя произошла ошибка'
+                    :
+                    'Пользователь с таким email уже существует';
+                setServerError({...serverError, signUp: textError});
+            })
+            .finally(() => setIsLoading(false));
+    }
+
+    function handleLogin(email, password) {
+        setServerError({});
+        setIsLoading(true);
+        return auth.authorize(email, password).then((data) => {
+            if (data.token) {
+                localStorage.setItem("token", data.token);
+                setUserData({name: data.name, email: data.email});
+                setLoggedIn(true);
+                setServerError({});
+                navigate("/movies");
+            }
+        })
+            .catch((err) => {
+                const textError = err === 'Ошибка: 401' ?
+                    'При авторизации произошла ошибка'
+                    :
+                    'Вы ввели неправильный логин или пароль';
+                setServerError({...serverError, login: textError});
+            })
+            .finally(() => setIsLoading(false));
+    }
+
+    function tokenCheck() {
+        const token = localStorage.getItem("token");
+        if (token) {
+            auth.getContent(token).then((data) => {
+                if (data) {
+                    setUserData({name: data.name, email: data.email});
+                    setLoggedIn(true);
+                    navigate(location.pathname);
+                }
+            });
+        }
     }
 
     const resetServerErr = () => setServerError({});
 
-    function handleLoggedOut(evt) {
-        evt.preventDefault();
-        localStorage.removeItem("jwt");
+    function handleSignOut() {
+        localStorage.removeItem('token');
         setLoggedIn(false);
-        navigate("/", {replace: false});
+        setCurrentUser({});
+        sessionStorage.removeItem('movies');
+        sessionStorage.removeItem('saved-movies');
+        sessionStorage.removeItem('query');
+        navigate("/");
     }
 
+    const isHeaderVisible = () => {
+        const locations = ["/", "/saved-movies", "/movies", "/profile"];
+        return locations.includes(location.pathname);
+    };
+
+    const isFooterVisible = () => {
+        const locations = ["/", "/saved-movies", "/movies"];
+        return locations.includes(location.pathname);
+    };
 
     return (
         <div className="page">
             <CurrentUserContext.Provider value={currentUser}>
                 <SavedMoviesContext.Provider value={savedMovies}>
-
-                    {pathPageWithHeader.includes(location.pathname) && <Header loggedIn={loggedIn}/>}
+                    {isHeaderVisible() && <Header loggedIn={loggedIn}/>}
                     <Routes>
-                        <Route path="/" element={<Main/>}/>
-                        <Route path="/movies" element={
-                            <ProtectedRoute isLoggin={loggedIn}>
-                                <Movies handleLikeClick={handleLikeClick}/>
-                            </ProtectedRoute>}
+                        <Route path="/" element={<Main/>}></Route>
+                        <Route path="/signin"
+                               element={<Login
+                                   resetServerError={resetServerErr}
+                                   serverError={serverError.login} isLoading={isLoading}
+                                   handleLogin={handleLogin} loggedIn={loggedIn}/>}></Route>
+                        <Route path="/signup"
+                               element={<Register
+                                   resetServerError={resetServerErr}
+                                   serverError={serverError.signUp} isLoading={isLoading}
+                                   handleRegister={handleRegister} loggedIn={loggedIn}/>}></Route>
+                        <Route
+                            path="/movies"
+                            element={
+                                <ProtectedRoutes loggedIn={loggedIn}>
+                                    <Movies
+                                        handleLikeClick={handleCardAdd}
+                                    />
+                                </ProtectedRoutes>
+                            }
                         />
-                        <Route path="/saved-movies" element={
-                            <ProtectedRoute isLoggin={loggedIn}>
-                                <SavedMovies handleRemoveCard={handleRemoveCard}/>
-                            </ProtectedRoute>}/>
-                        <Route path="/profile" element={
-                            <ProtectedRoute isLoggin={loggedIn}>
-                                <Profile
-                                    handleButtonEdit={handleUpdateUser}
-                                    isLoading={isLoading}
-                                    serverError={serverError.profile}
-                                    success={successUpdate}
-                                    handleLoggedOut={handleLoggedOut}
-                                    resetServerErr={resetServerErr}
-                                />
-                            </ProtectedRoute>}/>
-                        <Route path="/signin" element={
-                            <Login
-                                resetServerErr={resetServerErr}
-                                handleSubmit={handleClickSignInButton}
-                                isLoading={isLoading}
-                                isLoggin={loggedIn}
-                                serverError={serverError.signIn}
-                            />
-                        }/>
-                        <Route path="/signup" element={
-                            <Register
-                                resetServerErr={resetServerErr}
-                                handleSubmit={handleClickSignUpButton}
-                                isLoading={isLoading}
-                                isLoggin={loggedIn}
-                                serverError={serverError.signUp}
+                        <Route
+                            path="/saved-movies"
+                            element={
+                                <ProtectedRoutes loggedIn={loggedIn}>
+                                    <SavedMovies
+                                        handleRemoveButton={handleCardDelete}
+                                    />
+                                </ProtectedRoutes>
+                            }
+                        />
+                        <Route exact path="/profile" element={<ProtectedRoutes loggedIn={loggedIn}>
+                            <Profile signOut={handleSignOut}
+                                     serverError={serverError.profile}
+                                     success={successUpdate}
+                                     resetServerError={resetServerErr}
+                                     onUpdateUser={handleUpdateUser} isLoading={isLoading}/>
+                        </ProtectedRoutes>}></Route>
 
-                            />
-                        }/>
-                        <Route path="/*" element={< NotFoundPage/>}/>
+                        <Route path="/*" element={< NotFoundPage/>}></Route>
                     </Routes>
 
-
-                    {pathPageWithFooter.includes(location.pathname) && <Footer/>}
-
+                    {isFooterVisible() && <Footer/>}
                 </SavedMoviesContext.Provider>
             </CurrentUserContext.Provider>
         </div>

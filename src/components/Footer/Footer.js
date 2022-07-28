@@ -10,13 +10,16 @@ export function Footer() {
                 <p className="footer__year">&copy;{year}</p>
                 <ul className="footer__links">
                     <li className="footer__item">
-                        <a className="footer__link" href="https://praktikum.yandex.ru" target="_blank" rel="noopener noreferrer">Яндекс.Практикум</a>
+                        <a className="footer__link" href="https://praktikum.yandex.ru" target="_blank"
+                           rel="noopener noreferrer">Яндекс.Практикум</a>
                     </li>
                     <li className="footer__item">
-                        <a className="footer__link" href="https://github.com/Marvin811" target="_blank" rel="noopener noreferrer">Github</a>
+                        <a className="footer__link" href="https://github.com/Marvin811" target="_blank"
+                           rel="noopener noreferrer">Github</a>
                     </li>
                     <li className="footer__item">
-                        <a className="footer__link" href="https://t.me/egorlukin" target="_blank" rel="noopener noreferrer">Telegram</a>
+                        <a className="footer__link" href="https://t.me/egorlukin" target="_blank"
+                           rel="noopener noreferrer">Telegram</a>
                     </li>
                 </ul>
             </div>

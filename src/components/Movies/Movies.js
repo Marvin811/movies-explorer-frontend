@@ -1,11 +1,9 @@
 import React, {useEffect, useState} from "react";
-import Navigation from "../Navigation/Navigation";
 import {SearchForm} from "./SearchForm/SearchForm";
 import {MoviesCardList} from "./MoviesCardList/MoviesCardList"
 import {More} from "./More/More";
 import useWindowWidth from "../../hooks/useWindowWidth";
 import {filterMovies, filterShortMovies} from '../../utils/searchFilter';
-import moviesApi from "../../utils/MoviesApi";
 import {
     DESKTOP_WIDTH,
     TABLET_WIDTH,
@@ -16,8 +14,10 @@ import {
     NUMBER_OF_CARDS_FOR_TABLET,
     NUMBER_OF_CARDS_FOR_MOBILE,
 } from '../../utils/const';
+import moviesApi from "../../utils/MoviesApi";
+import Preloader from "../Preloader/Preloader";
 
-export function Movies({ handleLikeClick }) {
+export function Movies({handleLikeClick}) {
     const windowWidth = useWindowWidth();
     const [movies, setMovies] = useState([]);
     const [cardCount, setCardCount] = useState(0);
@@ -39,7 +39,7 @@ export function Movies({ handleLikeClick }) {
 
         if (isEnableShortMovies && movies) {
             try {
-                const { movies } = JSON.parse(localStorage.reqData);
+                const {movies} = JSON.parse(localStorage.reqData);
                 setMovies(movies);
             } catch {
                 setMovies([]);
@@ -94,7 +94,7 @@ export function Movies({ handleLikeClick }) {
         e.preventDefault();
         setIsLoading(true);
         if (!localStorage.movies) {
-            moviesApi.getAllMovies()
+            moviesApi.getMovies()
                 .then((data) => {
                     localStorage.setItem('movies', JSON.stringify(data));
                     handleSetMovies();
@@ -105,24 +105,32 @@ export function Movies({ handleLikeClick }) {
         Возможно, проблема с соединением или сервер недоступен.
         Подождите немного и попробуйте ещё раз.`);
                 })
-
+                .finally(() => setIsLoading(false));
         } else {
             handleSetMovies();
+            setIsLoading(false);
         }
     }
 
     return (
         <div>
-            <Navigation/>
             <SearchForm
                 searchQuery={searchQuery}
                 handleSearchQuery={(e) => setSearchQuery(e.target.value)}
                 handleSearchButton={handleSearchButton}
                 isActiveCheckbox={isEnableShortMovies}
                 switchShortMovie={switchShortMovie}
+                isLoading={isLoading}
             />
-            <MoviesCardList movies={movies.slice(0, cardCount)} handleLikeClick={handleLikeClick}/>
-            <More handleClickButton={handleClickButton}/>
+
+            {isLoading ? (<Preloader/>)
+                : movies.length > 0
+                    ? (<MoviesCardList movies={movies.slice(0, cardCount)} handleLikeClick={handleLikeClick}/>
+                    ) : (<span className="movies__not-found">{responseText}</span>)
+            }
+            {(movies.length > 3) && (cardCount < movies.length)
+                && (<More handleClickButton={handleClickButton}/>)}
+
         </div>
 
     )

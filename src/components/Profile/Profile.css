@@ -52,6 +52,7 @@
     left: 0;
     top: 0;
 }
+
 .profile__input-container {
     width: 410px;
     position: relative;
@@ -80,7 +81,7 @@
     background-color: #fafafa;
     border: none;
     cursor: pointer;
-    font-family: "Inter";
+    font-family: "Inter", Arial, sans-serif;
     font-style: normal;
     font-weight: 400;
     font-size: 13px;
@@ -92,8 +93,20 @@
     opacity: 0.6;
 }
 
+.profile__button-exit {
+    color: #EE3465;
+}
+
+.profile__error-green {
+    color: #2be080;
+}
+
+.profile__error-red {
+    color: #EE3465;
+}
+
 .profile__link {
-    font-family: "Inter";
+    font-family: "Inter", Arial, sans-serif;
     font-style: normal;
     font-weight: 500;
     font-size: 13px;

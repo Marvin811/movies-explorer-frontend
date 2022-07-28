@@ -1,51 +1,53 @@
-import {BASE_URL} from "./const";
+export const BASE_URL = 'https://api.movies.mav1.nomoredomains.xyz';
+
 
 const checkResponse = (response) => {
     if (response.ok) {
-        return response.json();
+        return response.json()
     }
     return Promise.reject(`Ошибка ${response.status}`);
-};
+}
 
-export const register = (name, email, password) => {
+
+export const register = (name, password, email) => {
     return fetch(`${BASE_URL}/signup`, {
-        method: "POST",
+        method: 'POST',
         headers: {
-            "Content-Type": "application/json",
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-            name,
-            email,
-            password,
-        }),
+        body: JSON.stringify({name, password, email})
     })
-        .then(checkResponse);
+        .then(checkResponse)
 };
 
-export const authorize = (email, password) => {
+
+export const authorize = (password, email) => {
     return fetch(`${BASE_URL}/signin`, {
         method: 'POST',
         headers: {
-            "Content-Type": "application/json",
-            'Access-Control-Allow-Origin': 'https://api.movies.mav1.nomoredomains.xyz',
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-            email,
-            password,
-        }),
+        body: JSON.stringify({password, email})
     })
-        .then(checkResponse);
-}
+        .then(checkResponse)
+};
 
-export const getCurrentUserInfo = (token) => {
+
+export const getContent = (token) => {
     return fetch(`${BASE_URL}/users/me`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
-            },
-        })
-        .then((res) => res.json())
-        .then((data) => data);
-
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+        }
+    })
+        .then(res => res.json())
+        .then(data => data)
 }
+
+
+
+

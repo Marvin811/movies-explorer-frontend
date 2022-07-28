@@ -1,0 +1,104 @@
+import React from "react";
+import './Form.css';
+import logo from "../../images/Logo.svg";
+import {Link, useLocation} from "react-router-dom";
+import {ErrorMessage} from "../ErrorMessage/ErrorMessage";
+import validators from "../../utils/validators";
+import useForm from "../../hooks/useForm";
+import Preloader from "../Preloader/Preloader";
+
+
+function Form({handleSubmitRegister, title, text, button, handleSubmitLogin, serverError, isLoading}) {
+
+    let location = useLocation();
+
+    const {
+        values,
+        errors,
+        handleChange,
+        handleSubmit,
+        resetForm,
+        isValid,
+
+    } = useForm(onSubmit, validators);
+
+    function onSubmit() {
+
+
+        if (location.pathname === "/signin") {
+
+            handleSubmitLogin(values.password, values.email)
+                .catch((err) => {
+                    console.log(err)
+                    resetForm()
+                })
+        } else if (location.pathname === "/signup") {
+            handleSubmitRegister(values.name, values.password, values.email)
+                .catch((err) => {
+                    console.log(err)
+                    resetForm()
+                })
+
+        }
+    }
+
+
+    const NameInput = () => {
+        return (
+            <div className="form__item-text-container">
+                <p className="form__item-text">Имя</p>
+                <input onChange={handleChange} value={values.name || ''} id="input_name" type="name" name="name"
+                       className="form__item-input"/>
+                <span>
+                    <ErrorMessage isValid={isValid} text={errors.name}/>
+                </span>
+            </div>
+        )
+    }
+
+
+    const buttonClassName = `${location.pathname.includes("/signup") ? "form__button" : "form__button form__button_signin"}`;
+    const ifDisabledClass = `${isValid ? `${buttonClassName}` : `${buttonClassName} form__button_disabled`}`
+
+    return (
+        <form className="form" onSubmit={handleSubmit}>
+            <Link className="profile__link" to="/"><img src={logo} alt="Логотип" className="form__logo"/></Link>
+            <h1 className="form__title">{title}</h1>
+
+            {location.pathname === "/signup" && NameInput()
+
+            }
+            <p className="form__item-text">E-mail</p>
+            <input onChange={handleChange} id="input_email" name="email" type="email" className="form__item-input"
+                   value={values.email || ''}/>
+            <span>
+                 <ErrorMessage isValid={isValid} text={errors.email}/>
+            </span>
+
+
+            <p className="form__item-text">Пароль</p>
+            <input onChange={handleChange} value={values.password || ''} id="input_password" type="password"
+                   name="password" className="form__item-input"/>
+            <span>
+                <ErrorMessage isValid={isValid} text={errors.password}/>
+            </span>
+            {serverError && <p className='profile__error-red'>{serverError}</p>}
+            {isLoading ?
+                <Preloader/>
+                :
+                <button className={ifDisabledClass} disabled={!isValid} type="submit">{button}</button>}
+
+            <div className="form__link-container">
+                <p className="form__link-text">{text}</p>
+                {location.pathname.includes("/signup") && (
+                    <Link className="form__link " to="/signin">Войти</Link>
+                )} {location.pathname.includes("/signin") && (
+                <Link className="form__link" to="/signup">Регистрация</Link>
+            )}
+            </div>
+
+        </form>
+    )
+}
+
+export default Form;

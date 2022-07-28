@@ -50,7 +50,7 @@
     height: 34px;
     width: 34px;
     border-radius: 30px;
-    margin:0 7px 0 7px;
+    margin: 0 7px 0 7px;
     opacity: 1;
     background-color: #fafafa;
 
@@ -96,7 +96,7 @@
 
 @media screen and (max-width: 450px) {
     .search {
-        padding:0 0 10px;
+        padding: 0 0 10px;
         margin: 0 12px;
     }
 
@@ -106,6 +106,7 @@
         align-items: center;
         margin: 60px auto 0;
     }
+
     .search__input {
         font-size: 11px;
         line-height: 18px;
@@ -120,6 +121,7 @@
         font-size: 11px;
         line-height: 18px;
     }
+
     .search__short-films {
         width: 150px;
         margin: 0 auto 17px;
