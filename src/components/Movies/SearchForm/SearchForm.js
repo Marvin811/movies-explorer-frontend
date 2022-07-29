@@ -19,14 +19,9 @@ export function SearchForm({
                     <div className="search__input-container">
                         <input
                             className="search__input"
-                            type="text"
-                            name="searchValue"
-                            placeholder="Фильм"
-                            required
-                            value={searchQuery}
-                            onChange={handleSearchQuery}
+                            value={searchQuery} onChange={handleSearchQuery} placeholder={'Фильм'}
                         />
-                        <button className="search__button" type="submit" disabled={isLoading || !searchQuery}>
+                        <button className="search__button" disabled={isLoading || !searchQuery}>
                             <img src={find} alt="Кнопка поиска"/>
                         </button>
                     </div>

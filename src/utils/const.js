@@ -11,6 +11,7 @@ export const NUMBER_OF_CARDS_FOR_MOBILE = 5;
 export const NUMBER_OF_CARDS_FOR_TABLET = 8;
 export const NUMBER_OF_CARDS_FOR_DESKTOP = 12;
 
-
+//Длительность короткометражного фильма(в минутах)
+export const SHORT_MOVIE = 40
 
 

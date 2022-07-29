@@ -90,7 +90,6 @@ function App() {
         }
     }
 
-    // готовый код не трогать !!!//
     function handleUpdateUser(userData) {
         setIsLoading(true);
         setServerError({});
@@ -175,9 +174,9 @@ function App() {
         localStorage.removeItem('token');
         setLoggedIn(false);
         setCurrentUser({});
-        sessionStorage.removeItem('movies');
-        sessionStorage.removeItem('saved-movies');
-        sessionStorage.removeItem('query');
+        localStorage.removeItem('movies');
+        localStorage.removeItem('reqData');
+        localStorage.removeItem('toggleState');
         navigate("/");
     }
 
