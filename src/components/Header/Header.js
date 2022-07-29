@@ -1,30 +1,49 @@
 import React from "react";
-import './Header.css';
-import {Link} from "react-router-dom";
-import Navigation from '../Navigation/Navigation'
-import Logo from  '../Logo/Logo';
+import './Header.css'
+import {useLocation} from "react-router-dom";
+import {useState, useEffect} from 'react';
+import {useDebouncedCallback} from 'use-debounce';
+import logo from "../../images/Logo.svg";
+import HeaderLinks from "../HeaderLinks/HeaderLinks"
+import Navigation from "../Navigation/Navigation"
+import {BurgerMenu} from "../Burger/Burger"
+import {NavLink} from "react-router-dom";
 
-export function Header(props) {
-    const {loggedIn} = props;
+export function Header({loggedIn}) {
+    let location = useLocation();
+    const isMain = location.pathname === "/";
+
+    const [isSmallWidth, setIsSmallWidth] = useState(false)
+
+    const Resize = useDebouncedCallback(
+        () => {
+            if (window.innerWidth <= 768) {
+                setIsSmallWidth(true)
+            } else setIsSmallWidth(false)
+        }, 200
+    )
+
+    useEffect(() => {
+        window.addEventListener('resize', Resize)
+        return () => {
+            window.removeEventListener('resize', Resize);
+        }
+    }, [Resize])
+
+    const headerThemeClassName = `${isMain ? "header header_type_main" : " header header_type_other"}`;
+    const headerComponents = isSmallWidth ? <BurgerMenu/> : <Navigation/>;
+
     return (
-        <header className='header'>
-            <nav className="header__container">
-                <><Logo/></>
-                {loggedIn ? (<Navigation/>) : (
-                    <>
-                        <div className="header__links">
-                            <Link className="header__link" to="/signup">
-                                <h2 className="header__link-title">Регистрация</h2>
-                            </Link>
-                            <Link className="header__link" to="/signin">
-                                <button className="header__link-button">Войти</button>
-                            </Link>
 
-                        </div>
-                    </>
-                )
-                }
-            </nav>
+        <header className={headerThemeClassName}>
+            <NavLink className="profile__link" to="/"><img src={logo} alt="Логотип" className="header__logo"/></NavLink>
+            {!loggedIn && (
+                <HeaderLinks/>
+            )}
+            {loggedIn && (
+                headerComponents
+            )}
         </header>
     )
 }
+

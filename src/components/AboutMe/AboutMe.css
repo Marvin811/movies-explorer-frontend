@@ -75,6 +75,12 @@
     text-decoration: none;
 }
 
+.about-me__link:hover {
+    opacity: .6;
+    cursor: pointer;
+    transition: background-color ease-out 0.3s;
+}
+
 .about-me__photo-box {
     padding: 80px 6px 0;
     max-width: 270px;

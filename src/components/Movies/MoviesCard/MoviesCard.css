@@ -18,7 +18,7 @@
 }
 
 .card__button {
-    background-image: url(../../images/Unsaved.svg);
+    background-image: url(../../../images/Unsaved.svg);
     background-position: center;
     background-repeat: no-repeat;
     width: 30px;
@@ -36,11 +36,11 @@
 }
 
 .card__button_type_delete {
-    background-image: url(../../images/crossCard.svg);
+    background-image: url(../../../images/crossCard.svg);
 }
 
 .card__button_type_saved {
-    background-image: url(../../images/Saved.svg);
+    background-image: url(../../../images/Saved.svg);
 }
 
 .card__button-container {
